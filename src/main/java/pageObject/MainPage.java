@@ -4,25 +4,27 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
+import utils.LocalWebDriver;
 
 import java.util.List;
-import java.util.Objects;
 
 public class MainPage {
 
-    WebDriver webDriver;
-    private final By productElement = By.xpath("//ul[contains(@class, 'products')]/li");
+    WebDriver webDriver = LocalWebDriver.getInstance();
+    private final By productElements = By.xpath("//ul[contains(@class, 'products')]/li");
 
     @FindBy(xpath = "//ul[contains(@class, 'products')]/li")
-    List<WebElement>elementList; // We can return in getAllProducts()
+    List<WebElement> elementList; // We can return in getAllProducts()
 
-    public MainPage(WebDriver webDriver) {
-        this.webDriver = webDriver;
-        PageFactory.initElements(webDriver, this);
+    public List<WebElement> getElementList() {
+        return webDriver.findElements(productElements);
     }
 
-    public List<WebElement> getAllProducts() {
-        return webDriver.findElements(productElement);
+    public ProductPage selectProductFromListByName(String productName) {
+        getElementList().stream()
+                .filter(name -> name.getText().contains(productName))
+                .findFirst()
+                .ifPresent(WebElement::click);
+        return new ProductPage();
     }
 }

@@ -12,7 +12,7 @@ public class PropertiesReader {
     public static Properties properties;
 
     public static Properties readProperties() {
-        FileReader reader = null;
+        FileReader reader;
 
         try {
             reader = new FileReader("configuration.properties");
